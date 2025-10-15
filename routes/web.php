@@ -45,6 +45,11 @@ Route::get('/cc', function() {
     return "Cleared!";
 });
 
+Route::middleware(['auth'])->group(function() {
+    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
+    Route::post('/wallet/add', [WalletController::class, 'addBalance'])->name('wallet.add');
+});
+
 Route::get('/controller', function() {
     Artisan::call('make:controller Admin/TagManagerController');
     return "Controller Done!";
@@ -449,11 +454,6 @@ Route::group(['namespace'=>'Admin','middleware' => ['auth','lock','check_refer']
     Route::post('customer/ip-store', [CustomerManageController::class,'ipblock_store'])->name('customers.ipblock.store');
     Route::post('customer/ip-update', [CustomerManageController::class,'ipblock_update'])->name('customers.ipblock.update');
     Route::post('customer/ip-destroy', [CustomerManageController::class,'ipblock_destroy'])->name('customers.ipblock.destroy');
-
-    Route::middleware('auth')->group(function() {
-    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
-    Route::post('/wallet/add', [WalletController::class, 'addBalance'])->name('wallet.add');
-});
 
 
 });
